@@ -61,11 +61,12 @@ def format_lin_axis(axis):
 
 def format_log_axis(axis):
     """Format logarithmic axis."""
-    axis.set_major_locator(ticker.LogLocator(subs=np.arange(1, 10)))
+    majorsubs = np.arange(1, 10)
+    axis.set_major_locator(ticker.LogLocator(subs=majorsubs, numticks=999))
     minorsubs = []
     minorsubs.extend(np.arange(1., 6., 0.1))
     minorsubs.extend(np.arange(6., 10., 0.2))
-    axis.set_minor_locator(ticker.LogLocator(subs=minorsubs))
+    axis.set_minor_locator(ticker.LogLocator(subs=minorsubs, numticks=999))
     axis.set_major_formatter(ticker.FuncFormatter(log_label))
     axis.set_minor_formatter(ticker.NullFormatter())
     axis.set_tick_params(labelsize=6, pad=0)
