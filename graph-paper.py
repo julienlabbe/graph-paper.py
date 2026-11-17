@@ -15,42 +15,44 @@ from matplotlib import ticker
 
 # Number of decades for log scale
 # set to zero for a linear scale
-xdecades = 3
-ydecades = 0
+XDECADES        = 3
+YDECADES        = 2
 
 # Output filename
 # One can use wildcards :
 #   %x and %y are replaced by the value of xdecades and ydecades
 #   %s is replaced by '_semilog_n-decades' or '_log_n-m-decades' (or nothing with linear scale)
-save      = True
-filename  = "Examples/Papier%s"
-extension = ".pdf"
+SAVE            = True
+FILE_NAME       = "Examples/Papier%s"
+EXTENSION       = ".pdf"
 
 # Paper and figure
-landscape   = True  # if true, swap width and height
-centimeters = True  # if false, length unit is inch (matplotlib default)
-paperwidth  = 21.0
-paperheight = 29.7
-figwidth    = 16.0
-figheight   = 24.0
-rightmargin = 2.5
-topmargin   = 2.5
+LANDSCAPE       = True
+CENTIMETERS     = True  # if false, length unit is inch (matplotlib default)
+PAPER_WIDTH     = 21.0
+PAPER_HEIGHT    = 29.7
+FIG_WIDTH       = 16.0
+FIG_HEIGHT      = 24.0
+RIGHT_MARGIN    = 2.5
+TOP_MARGIN      = 2.5
 
 # line styles
-major_linestyle = '-'
-major_linewidth = 0.5
-major_color     = "black"
-major_alpha     = 1.0
+MAJOR_LINESTYLE = '-'
+MAJOR_LINEWIDTH = 0.5
+MAJOR_COLOR     = "black"
+MAJOR_ALPHA     = 1.0
 
-minor_linestyle = '-'
-minor_linewidth = 0.25
-minor_color     = 'black'
-minor_alpha     = 0.7
+MINOR_LINESTYLE = '-'
+MINOR_LINEWIDTH = 0.25
+MINOR_COLOR     = 'black'
+MINOR_ALPHA     = 0.7
 
 # Whether to call show()
-showfig = False
+SHOWFIG = False
 
 ### End of parameters block ======================
+
+X_DEC, Y_DEC = (YDECADES, XDECADES) if LANDSCAPE else (XDECADES, YDECADES)
 
 # Axes formatting function
 def format_lin_axis(axis):
@@ -74,19 +76,21 @@ def format_log_axis(axis):
 
 def log_label(value, _index):
     """Return logarithmic label (empty for 1)."""
+    if value <= 0:
+        return ''
     digit = int(round(value / (10 ** np.floor(np.log10(value)))))
     return str(digit) if 1 < digit < 10 else ''
 
 # Create figure
-unit = 1/2.54 if centimeters else 1
-fig, ax = plt.subplots(figsize=(paperwidth * unit, paperheight * unit))
+UNIT = 1/2.54 if CENTIMETERS else 1
+fig, ax = plt.subplots(figsize=(PAPER_WIDTH * UNIT, PAPER_HEIGHT * UNIT))
 
 # x axis
 xmin = 0
-xmax = figwidth
-if xdecades > 0:
+xmax = FIG_WIDTH
+if X_DEC > 0:
     xmin = 10
-    xmax = xmin * 10**xdecades
+    xmax = xmin * 10**X_DEC
     ax.set_xscale('log')
     format_log_axis(ax.xaxis)
 else:
@@ -94,10 +98,10 @@ else:
 
 # y axis
 ymin = 0
-ymax = figheight
-if ydecades > 0:
+ymax = FIG_HEIGHT
+if Y_DEC > 0:
     ymin = 10
-    ymax = ymin * 10**ydecades
+    ymax = ymin * 10**Y_DEC
     ax.set_yscale('log')
     format_log_axis(ax.yaxis)
 else:
@@ -118,55 +122,63 @@ ax.tick_params(
 ax.set_axisbelow(True) # grille sous le tracé
 ax.grid(
     True, which='minor', axis='both',
-    linestyle=minor_linestyle, linewidth=minor_linewidth,
-    color=minor_color, alpha=minor_alpha,
+    linestyle=MINOR_LINESTYLE, linewidth=MINOR_LINEWIDTH,
+    color=MINOR_COLOR, alpha=MINOR_ALPHA,
 )
 ax.grid(
     True, which='major', axis='both',
-    linestyle=major_linestyle, linewidth=major_linewidth,
-    color=major_color, alpha=major_alpha,
+    linestyle=MAJOR_LINESTYLE, linewidth=MAJOR_LINEWIDTH,
+    color=MAJOR_COLOR, alpha=MAJOR_ALPHA,
 )
 
 # Landscape
-if landscape:
+if LANDSCAPE:
     ax.invert_xaxis()
     ax.tick_params(
         axis='both', labelrotation=90,
         labelbottom=True, labelright=True,
         labeltop=False, labelleft=False
     )
-    leftmargin  = topmargin
-    topmargin   = rightmargin
-    rightmargin = paperwidth - figwidth - leftmargin
 
 # Margins
 # from https://stackoverflow.com/questions/29400116/using-matplotlib-how-can-i-print-something-actual-size
-leftmargin = paperwidth - figwidth - rightmargin
-bottommargin = paperheight - figheight - topmargin
+if LANDSCAPE:
+    top_margin = RIGHT_MARGIN
+    right_margin = PAPER_WIDTH - FIG_WIDTH - TOP_MARGIN
+else:
+    top_margin = TOP_MARGIN
+    right_margin = RIGHT_MARGIN
+left_margin = PAPER_WIDTH - FIG_WIDTH - right_margin
+bottom_margin = PAPER_HEIGHT - FIG_HEIGHT - top_margin
 fig.subplots_adjust(
-    left=leftmargin / paperwidth,
-    bottom=bottommargin / paperheight,
-    right=1. - rightmargin / paperwidth,
-    top=1. - topmargin / paperheight,
+    left=left_margin / PAPER_WIDTH,
+    bottom=bottom_margin / PAPER_HEIGHT,
+    right=1. - right_margin / PAPER_WIDTH,
+    top=1. - top_margin / PAPER_HEIGHT,
 )
 
 ### Show and save
 
-if save:
-    if xdecades == 0 and ydecades == 0:
-        filename = filename.replace('%s', "")
-    elif xdecades != 0 and ydecades != 0:
-        filename = filename.replace('%s', "_log_%x-%y-decades")
-    elif xdecades + ydecades == 1:
-        filename = filename.replace('%s', "_semilog_1-decade")
+if SAVE:
+    output_file = FILE_NAME + EXTENSION
+    if XDECADES == 0 and YDECADES == 0:
+        output_file = output_file.replace('%s', "")
+    elif XDECADES != 0 and YDECADES != 0:
+        output_file = output_file.replace('%s', "_log_%x-%y-decades")
+    elif XDECADES + YDECADES == 1:
+        output_file = output_file.replace('%s', "_semilog_1-decade")
     else:
-        filename = filename.replace('%s', "_semilog_" + str(xdecades + ydecades) + "-decades")
-    filename = filename.replace('%x', str(xdecades))
-    filename = filename.replace('%y', str(ydecades))
+        output_file = output_file.replace(
+            '%s', "_semilog_" + str(XDECADES + YDECADES) + "-decades"
+        )
+    output_file = output_file.replace('%x', str(XDECADES))
+    output_file = output_file.replace('%y', str(YDECADES))
 
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
-    fig.savefig(filename + extension, dpi=None if extension == '.pdf' else 600)
-    print("File " + filename + extension + " created.")
+    out_dir = os.path.dirname(output_file)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
+    fig.savefig(output_file, dpi=None if EXTENSION == '.pdf' else 600)
+    print("File " + output_file + " created.")
 
-if showfig:
+if SHOWFIG:
     plt.show()
