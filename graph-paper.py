@@ -131,6 +131,30 @@ ax.grid(
     color=MAJOR_COLOR, alpha=MAJOR_ALPHA,
 )
 
+# Highlight decades
+frame_spine = ax.spines['left']
+decade_lw = frame_spine.get_linewidth()
+decade_color = frame_spine.get_edgecolor()
+decade_ls = frame_spine.get_linestyle()
+
+if X_DEC > 0:
+    for exp in range(2, X_DEC + 1):
+        ax.axvline(
+            10**exp,
+            linestyle=decade_ls,
+            linewidth=decade_lw,
+            color=decade_color,
+        )
+
+if Y_DEC > 0:
+    for exp in range(2, Y_DEC + 1):
+        ax.axhline(
+            10**exp,
+            linestyle=decade_ls,
+            linewidth=decade_lw,
+            color=decade_color,
+        )
+
 # Landscape
 if LANDSCAPE:
     ax.invert_xaxis()
