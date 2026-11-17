@@ -73,8 +73,8 @@ def format_log_axis(axis):
 
 def log_label(value, index):
     """Return logarithmic label (empty for 1)."""
-    pos = index % 9 + 1
-    return pos if pos > 1 else ''
+    digit = int(round(value / (10 ** np.floor(np.log10(value)))))
+    return str(digit) if 1 < digit < 10 else ''
 
 # Create figure
 unit = 1/2.54 if centimeters else 1
