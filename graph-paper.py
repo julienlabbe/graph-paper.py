@@ -79,10 +79,6 @@ def log_label(value, index):
 
 # Create figure
 unit = 1/2.54 if centimeters else 1
-if landscape:
-    paperheight, paperwidth = paperwidth, paperheight
-    figheight, figwidth = figwidth, figheight
-    rightmargin, topmargin = topmargin, rightmargin
 fig, ax = plt.subplots(figsize=(paperwidth * unit, paperheight * unit))
 
 # x axis
@@ -123,6 +119,17 @@ ax.grid(True, which='minor', axis='both',
 ax.grid(True, which='major', axis='both',
         linestyle=major_linestyle, linewidth=major_linewidth,
         color=major_color, alpha=major_alpha)
+# Landscape
+if landscape:
+    ax.invert_xaxis()
+    ax.tick_params(
+        axis='both', labelrotation=90,
+        labelbottom=True, labelright=True,
+        labeltop=False, labelleft=False
+    )
+    leftmargin  = topmargin
+    topmargin   = rightmargin
+    rightmargin = paperwidth - figwidth - leftmargin
 
 # Margins
 # from https://stackoverflow.com/questions/29400116/using-matplotlib-how-can-i-print-something-actual-size
