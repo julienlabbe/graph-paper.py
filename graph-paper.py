@@ -54,20 +54,27 @@ showfig = False
 
 # Axes formatting function
 def format_lin_axis(axis):
+    """Format linear axis."""
     axis.set_major_locator(ticker.MultipleLocator(1))
     axis.set_minor_locator(ticker.MultipleLocator(0.1))
     axis.set_major_formatter(ticker.NullFormatter())
     axis.set_minor_formatter(ticker.NullFormatter())
 
 def format_log_axis(axis):
+    """Format logarithmic axis."""
     axis.set_major_locator(ticker.LogLocator(subs=np.arange(1,10)))
     minorsubs = []
     minorsubs.extend(np.arange(1.,6.,0.1))
     minorsubs.extend(np.arange(6.,10.,0.2))
     axis.set_minor_locator(ticker.LogLocator(subs=minorsubs))
-    axis.set_major_formatter(ticker.FuncFormatter(lambda value, index: index%9+1 if index%9+1 > 1 else '')) # show log scale position
+    axis.set_major_formatter(ticker.FuncFormatter(log_label))
     axis.set_minor_formatter(ticker.NullFormatter())
     axis.set_tick_params(labelsize=6,pad=0)
+
+def log_label(value, index):
+    """Return logarithmic label (empty for 1)."""
+    pos = index % 9 + 1
+    return pos if pos > 1 else ''
 
 # Create figure
 unit = 1/2.54 if centimeters else 1
