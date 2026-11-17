@@ -31,10 +31,10 @@ LANDSCAPE       = True
 CENTIMETERS     = True  # if false, length unit is inch (matplotlib default)
 PAPER_WIDTH     = 21.0
 PAPER_HEIGHT    = 29.7
-FIG_WIDTH       = 16.0
-FIG_HEIGHT      = 24.0
-RIGHT_MARGIN    = 2.5
-TOP_MARGIN      = 2.5
+FIG_WIDTH       = 18.0
+FIG_HEIGHT      = 26.0
+RIGHT_MARGIN    = 1.5
+TOP_MARGIN      = 1.5
 
 # line styles
 MAJOR_LINESTYLE = '-'
