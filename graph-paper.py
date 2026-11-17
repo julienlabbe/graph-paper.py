@@ -9,12 +9,12 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
+from matplotlib import ticker
 
 ### Parameters ===================================
 
 # Number of decades for log scale
-# set to zero for linear scale
+# set to zero for a linear scale
 xdecades = 3
 ydecades = 0
 
@@ -72,7 +72,7 @@ def format_log_axis(axis):
     axis.set_minor_formatter(ticker.NullFormatter())
     axis.set_tick_params(labelsize=6, pad=0)
 
-def log_label(value, index):
+def log_label(value, _index):
     """Return logarithmic label (empty for 1)."""
     digit = int(round(value / (10 ** np.floor(np.log10(value)))))
     return str(digit) if 1 < digit < 10 else ''
@@ -108,17 +108,25 @@ ax.set_xlim(xmin, xmax)
 ax.set_ylim(ymin, ymax)
 
 # no ticks
-ax.xaxis.set_ticks_position('none')
-ax.yaxis.set_ticks_position('none')
+ax.tick_params(
+    axis='both', which='both',
+    bottom=False, top=False,
+    left=False, right=False,
+)
 
 # grid
 ax.set_axisbelow(True) # grille sous le tracé
-ax.grid(True, which='minor', axis='both',
-        linestyle=minor_linestyle, linewidth=minor_linewidth,
-        color=minor_color, alpha=minor_alpha)
-ax.grid(True, which='major', axis='both',
-        linestyle=major_linestyle, linewidth=major_linewidth,
-        color=major_color, alpha=major_alpha)
+ax.grid(
+    True, which='minor', axis='both',
+    linestyle=minor_linestyle, linewidth=minor_linewidth,
+    color=minor_color, alpha=minor_alpha,
+)
+ax.grid(
+    True, which='major', axis='both',
+    linestyle=major_linestyle, linewidth=major_linewidth,
+    color=major_color, alpha=major_alpha,
+)
+
 # Landscape
 if landscape:
     ax.invert_xaxis()
@@ -135,11 +143,12 @@ if landscape:
 # from https://stackoverflow.com/questions/29400116/using-matplotlib-how-can-i-print-something-actual-size
 leftmargin = paperwidth - figwidth - rightmargin
 bottommargin = paperheight - figheight - topmargin
-fig.subplots_adjust(left   = leftmargin / paperwidth,
-                    bottom = bottommargin / paperheight,
-                    right  = 1. - rightmargin / paperwidth,
-                    top    = 1. - topmargin   / paperheight,
-                    )
+fig.subplots_adjust(
+    left=leftmargin / paperwidth,
+    bottom=bottommargin / paperheight,
+    right=1. - rightmargin / paperwidth,
+    top=1. - topmargin / paperheight,
+)
 
 ### Show and save
 
