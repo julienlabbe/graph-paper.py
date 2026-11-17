@@ -6,7 +6,6 @@
 # J. Labbé, december 2019, mise à jour novembre 2026
 ##############################
 
-# Import everything from matplotlib (numpy is accessible via 'np' alias)
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
