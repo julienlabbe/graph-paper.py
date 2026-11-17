@@ -6,6 +6,7 @@
 # J. Labbé, december 2019, mise à jour novembre 2026
 ##############################
 
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
@@ -23,7 +24,7 @@ ydecades = 0
 #   %s is replaced by '_semilog_n-decades' or '_log_n-m-decades' (or nothing with linear scale)
 save      = True
 filename  = "Examples/Papier%s"
-extension =".pdf"
+extension = ".pdf"
 
 # Paper and figure
 landscape   = True  # if true, swap width and height
@@ -146,7 +147,9 @@ if save:
         filename = filename.replace('%s', "_semilog_" + str(xdecades + ydecades) + "-decades")
     filename = filename.replace('%x', str(xdecades))
     filename = filename.replace('%y', str(ydecades))
-    fig.savefig(filename + extension, dpi=600)
+
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    fig.savefig(filename + extension, dpi=None if extension == '.pdf' else 600)
     print("File " + filename + extension + " created.")
 
 if showfig:
