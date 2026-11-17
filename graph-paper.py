@@ -38,14 +38,14 @@ TOP_MARGIN      = 2.5
 
 # line styles
 MAJOR_LINESTYLE = '-'
-MAJOR_LINEWIDTH = 0.5
+MAJOR_LINEWIDTH = 0.4
 MAJOR_COLOR     = "black"
 MAJOR_ALPHA     = 1.0
 
 MINOR_LINESTYLE = '-'
-MINOR_LINEWIDTH = 0.25
+MINOR_LINEWIDTH = 0.2
 MINOR_COLOR     = 'black'
-MINOR_ALPHA     = 0.7
+MINOR_ALPHA     = 1.0
 
 # Whether to call show()
 SHOWFIG = False
